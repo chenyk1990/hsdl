@@ -3,9 +3,9 @@
 
 __version__ = "0.0.1"
 
-from .eqcct import eqcct
+# from .eqcct import eqcct
 from .patch import *
-
+from .plot import *
 
 
 

@@ -28,8 +28,8 @@ setup(
     long_description=long_description,
     author="HSDL developing team",
     author_email="chenyk2016@gmail.com",
-    url="https://github.com/chenyk1990/HSDL",
-    packages=['HSDL'],
+    url="https://github.com/chenyk1990/hsdl",
+    packages=['hsdl'],
     include_package_data=True,
     zip_safe=False,
     classifiers=[
