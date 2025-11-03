@@ -5,8 +5,6 @@
 
 **HSDL** A novel and practical method is proposed to refine an automatic earthquake catalog through the integration of hybrid shallow and deep learning techniques. The approach leverages the complementary strengths of both paradigms: shallow learning models, such as gradient boosting and support vector machines, offer interpretability, computational efficiency, and robustness for structured seismic attributes, while deep neural networks capture complex temporal–spatial patterns and waveform features that are often overlooked by traditional algorithms. By combining these two layers of intelligence, the method enables the systematic identification and correction of misclassified or low-quality events in large-scale automatic catalogs. The hybrid framework not only enhances the precision of event detection and phase association but also reduces false positives, ensuring a more reliable and consistent dataset for subsequent seismological analyses. This fusion of shallow and deep learning represents a significant step toward automated, data-driven catalog refinement, bridging the gap between algorithmic efficiency and geophysical interpretability.
 
-The Matlab counterpart of the package can be found at https://github.com/aaspip/MATdrr. 
-
 ## Reference
     Siervo et al. (2025). HSDL: A novel and practical method to refine an automatic earthquake catalog using hybrid shallow and deep learning, TBD.
     
@@ -76,7 +74,7 @@ Each figure in the gallery directory corresponds to a DEMO script in the "demo" 
 
 -----------
 ## Gallery
-The gallery figures of the DRR package can be found at
+The gallery figures of the HSDL package can be found at
     https://github.com/chenyk1990/gallery/tree/main/hsdl
 
 # Features 1
