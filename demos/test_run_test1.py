@@ -15,7 +15,7 @@ import numpy as np
 import seaborn as sns
 import matplotlib.pyplot as plt
 
-from hsdl.hsdl import *
+from hsdl import *
 
 # # EDA
 
@@ -25,10 +25,10 @@ from hsdl.hsdl import *
 
 
 # Load the data from both files and add a "type" column to distinguish between real and fake
-real_df = pd.read_csv('../all_real_picks.csv')
+real_df = pd.read_csv('../data/all_real_picks.csv')
 real_df['type'] = 1  # 1 for real data
 
-fake_df = pd.read_csv('../all_fake_picks.csv')
+fake_df = pd.read_csv('../data/all_fake_picks.csv')
 fake_df['type'] = 0  # 0 for fake data
 
 # Combine the real and fake data into a single DataFrame
@@ -220,6 +220,42 @@ plt.gca().tick_params(labelsize=16)
 plt.legend(['Type 1', 'Type 2'], fontsize=16)
 plt.savefig('fig_pca1.png',dpi=500)
 plt.show()
+
+
+################################################################################################
+# No labels
+################################################################################################
+plt.figure(figsize=(12, 10))
+# sns.scatterplot(x='PC1', y='PC2', hue='type', data=pca_df, palette=['red', 'blue'])
+
+
+# Filtering for red points (type 0) with PC1 > 0
+red_points = pca_df[(pca_df['type'] == 0) & (pca_df['PC1'] < -0.5)]
+
+# Filtering for blue points (type 1) with PC1 < 0
+blue_points = pca_df[(pca_df['type'] == 1) & (pca_df['PC1'] > -0.5)]
+
+# Plot and annotate red points with event_id
+for _, row in red_points.iterrows():
+    marker1=plt.scatter(row['PC1'], row['PC2'], color='red', edgecolor='black', s=100, marker='o', label='Fake')
+#     plt.text(row['PC1'] + 0.02, row['PC2'] + 0.02, str(row['event_id']), fontsize=9, color='red')
+
+# Plot and annotate blue points with event_id
+for _, row in blue_points.iterrows():
+    marker2=plt.scatter(row['PC1'], row['PC2'], color='blue', edgecolor='black', s=100, marker='o', label='Real')
+#     plt.text(row['PC1'] + 0.02, row['PC2'] + 0.02, str(row['event_id']), fontsize=9, color='blue')
+
+plt.title('PCA Plot of Features of Database 1',size=20,weight='normal')
+plt.xlabel('Principal Component 1',size=20,weight='normal')
+plt.ylabel('Principal Component 2',size=20,weight='normal')
+
+plt.gca().set_xlim(xmin=-4.5)
+plt.gca().set_xlim(xmax=4.5)
+plt.gca().tick_params(labelsize=16)
+plt.legend(handles=[marker2, marker1], labels=['Real','Fake'], fontsize=16)
+plt.savefig('fig_pca1_new.png',dpi=500)
+plt.show()
+
 ################################################################################################
 ################################################################################################
 
@@ -358,9 +394,9 @@ plt.figure(figsize=(12, 8))
 # Plot decision boundary
 plt.contourf(xx, yy, Z, alpha=0.4, cmap='RdBu')
 
-y_test_labels = y_test.replace({0: 'fake', 1: 'real'})
+y_test_labels = y_test.replace({0: 'Fake', 1: 'Real'})
 # Plot test data points
-sns.scatterplot(x=X_test['PC1'], y=X_test['PC2'], hue=y_test_labels, palette=['red', 'blue'], hue_order=['fake', 'real'], alpha=0.9, edgecolor='k')
+sns.scatterplot(x=X_test['PC1'], y=X_test['PC2'], hue=y_test_labels, palette=['red', 'blue'], hue_order=['Fake', 'Real'], alpha=0.9, edgecolor='k')
 
 # Highlight misclassified points and annotate with event_id and probabilities
 misclassified_points = X_test[misclassified].reset_index()
@@ -431,7 +467,7 @@ from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay
 # np.save('RF1_y_test_8features.npy',y_test)
 # np.save('RF1_y_pred_8features.npy',y_pred)
 cm = confusion_matrix(y_test, y_pred)
-disp = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=['fake', 'real'])
+disp = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=['Fake', 'Real'])
 disp.plot()
 plt.show()
 
@@ -505,6 +541,11 @@ f1 = f1_score(y_test, y_pred)
 print(f'Precision: {precision:.2f}')
 print(f'Recall: {recall:.2f}')
 print(f'F1 Score: {f1:.2f}')
+
+precision_rf=precision
+recall_rf=recall
+f1_rf=f1
+
 
 # Identify misclassified points
 misclassified = (y_test != y_pred)
@@ -582,7 +623,7 @@ from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay
 # np.save('RF1_y_test.npy',y_test)
 # np.save('RF1_y_pred.npy',y_pred)
 cm = confusion_matrix(y_test, y_pred)
-disp = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=['fake', 'real'])
+disp = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=['Fake', 'Real'])
 disp.plot()
 plt.show()
 
@@ -676,7 +717,7 @@ from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay
 # np.save('XGBoost1_y_pred_8features.npy',y_pred)
 
 cm = confusion_matrix(y_test, y_pred)
-disp = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=['fake', 'real'])
+disp = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=['Fake', 'Real'])
 disp.plot()
 plt.show()
 
@@ -770,7 +811,7 @@ sns.scatterplot(
     x=X_test_originalRF[:,0],
     y=X_test_originalRF[:,1],
     hue=y_test_labels,
-    palette={'fake': 'red', 'real': 'blue'},  # Ensure consistent colors
+    palette={'Fake': 'red', 'Real': 'blue'},  # Ensure consistent colors
     alpha=0.9,
     edgecolor='k'
 )
@@ -788,7 +829,7 @@ plt.legend(fontsize=16)
 #             fontsize=9, color='black'
 #         )
 
-plt.title(f'Random Forest Decision Boundary (Precision: {precision:.2f}, Recall: {recall:.2f}, F1: {f1:.2f})',size=20,weight='normal')
+plt.title(f'Random Forest Decision Boundary (Precision: {precision_rf:.2f}, Recall: {recall_rf:.2f}, F1: {f1_rf:.2f})',size=20,weight='normal')
 plt.xlabel('sp_ratio (original scale)',size=20,weight='normal')
 plt.ylabel('s_prob_max (original scale)',size=20,weight='normal')
 ax.text(-0.1,1,'(a)',transform=ax.transAxes,size=20,weight='normal')
@@ -801,7 +842,7 @@ sns.scatterplot(
     x=X_test_original[:, 0],
     y=X_test_original[:, 1],
     hue=y_test_labels,  # Use labeled data
-    palette={'fake': 'red', 'real': 'blue'},  # Ensure consistent colors
+    palette={'Fake': 'red', 'Real': 'blue'},  # Ensure consistent colors
     alpha=0.9,
     edgecolor='k'
 )
@@ -880,7 +921,7 @@ from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay
 # np.save('XGBoost1_y_test.npy',y_test)
 # np.save('XGBoost1_y_pred.npy',y_pred)
 cm = confusion_matrix(y_test, y_pred)
-disp = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=['fake', 'real'])
+disp = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=['Fake', 'Real'])
 disp.plot()
 plt.show()
 
